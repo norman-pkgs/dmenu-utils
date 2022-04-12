@@ -12,20 +12,26 @@ switch_sink() {
 }
 
 
-indexes=$(pacmd list-sinks | grep -E 'index:')
+indexes=$(pacmd list-sinks | grep -E 'index:' | awk -F':' "{print \$2}" | awk '{$1=$1};1')
 descriptions=$(pacmd list-sinks | grep -E 'device.description =')
 devices=$(echo $indexes | wc -l)
+
+typeset -A indexassociates
 
 lines=""
 for i in $(seq $devices)
 do
-    line=$(echo $indexes | awk -F':' "NR==$i {print \$2}")
-    line+="  "$(echo $descriptions | awk "NR==$i {print \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, \$11, \$12, \$13, \$14, \$15, \$16}")
+    realindex=$(echo $indexes | awk "NR==$i")
+    indexassociates[$i]=$realindex
+    line="$i "
+    line+=$(echo $descriptions | awk "NR==$i {print \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, \$11, \$12, \$13, \$14, \$15, \$16}")
     lines+=$line"\n"
 done
+
+echo $lines
 
 choice=$(echo $lines | grep . | dmenu | awk '{print $1}')
 
 [[ $choice == "" ]] && exit 1
 
-switch_sink $choice
+switch_sink $indexassociates[$choice]

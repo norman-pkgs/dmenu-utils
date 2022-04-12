@@ -1,11 +1,13 @@
 #!/bin/zsh
 
 powers="shutdown
-sleep
-reboot"
+blank
+reboot
+win10"
 
 choice=$(echo $powers | dmenu)
 
 [[ $choice == "shutdown" ]] && shutdown now
-[[ $choice == "sleep" ]] && blank
+[[ $choice == "blank" ]] && blank
 [[ $choice == "reboot" ]] && reboot
+[[ $choice == "win10" ]] && dmenu-virtualmachine
