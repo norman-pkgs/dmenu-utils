@@ -1,4 +1,4 @@
 #!/bin/sh
 
-[[ $(need-reboot) == "yes" ]] && dmenu-prompt "Kernel has updated, do we reboot" && echo "reboot" && exit 0
-echo "sudo virsh start win10"
+[[ $(need-reboot) == "yes" ]] && dmenu-prompt "Kernel has updated, do we reboot" && reboot && exit 0
+sudo virsh start win10
