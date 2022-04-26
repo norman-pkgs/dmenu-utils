@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-confirm=$(echo "yes\nno" | dmenu)
+confirm=$(echo "yes\nno" | dmenu -p $1)
 
 if [[ $confirm == "yes" ]]; then
     exit_code=0
