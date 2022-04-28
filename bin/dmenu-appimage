@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+cmd=$(find ~/.local/share/appimages -mindepth 1 | dmenu)
+
+eval $cmd
