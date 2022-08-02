@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 
 [[ $(need-reboot) == "yes" ]] && dmenu-prompt "Kernel has updated, do we reboot" && reboot && exit 0
-sudo virsh start win10
+xorg-state-save && sudo virsh start win10
