@@ -5,6 +5,8 @@ blank
 reboot
 win10"
 
+xorg-state-save
+
 choice=$(echo $powers | dmenu)
 
 [[ $choice == "shutdown" ]] && shutdown now
