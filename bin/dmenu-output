@@ -13,7 +13,7 @@ switch_sink() {
 
 
 indexes=$(pacmd list-sinks | grep -E 'index:' | awk -F':' "{print \$2}" | awk '{$1=$1};1')
-descriptions=$(pacmd list-sinks | grep -E 'device.description =')
+descriptions=$(pacmd list-sinks | grep -E 'device.description =' | sed 's/"//g')
 devices=$(echo $indexes | wc -l)
 
 typeset -A indexassociates
