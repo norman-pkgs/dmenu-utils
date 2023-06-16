@@ -10,7 +10,7 @@ partition=/dev/$(lsblk --list | grep part | grep -v / | awk '{print $1 " " $4}' 
 mount $partition && exit 0
 
 # Select a mount point through dmenu
-mountpoint=$(cd /mnt && find * -maxdepth 1 -empty -type d | dmenu)
+mountpoint=$(cd /mnt && find * -maxdepth 0 -empty -type d | dmenu)
 
 # If no selection exit
 [[ $mountpoint == "" ]] && exit 1
