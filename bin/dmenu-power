@@ -2,8 +2,7 @@
 
 powers="shutdown
 blank
-reboot
-win10"
+reboot"
 
 xorg-state-save
 
@@ -12,4 +11,3 @@ choice=$(echo $powers | dmenu)
 [[ $choice == "shutdown" ]] && shutdown now
 [[ $choice == "blank" ]] && blank
 [[ $choice == "reboot" ]] && reboot
-[[ $choice == "win10" ]] && dmenu-virtualmachine
