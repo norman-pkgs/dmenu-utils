@@ -6,6 +6,19 @@ partition=/dev/$(lsblk --list | grep part | grep -v / | awk '{print $1 " " $4}' 
 # No partition? #exit
 [[ $partition == "/dev/" ]] && exit 1
 
+path_type=$(sudo blkid $partition -s TYPE -o value)
+
+if [[ $path_type == "crypto_LUKS" ]]; then
+    echo "prompting password"
+    password=$(echo "" | dmenu -p "Enter password")
+    [[ $password == "" ]] && echo "password empty." && exit 1
+    current=$(cd /dev/mapper && find * -type l -name "secret*" | sed 's/[^0-9]//g' | sort | awk 'LR == 0')
+    ((next = $current + 1))
+    echo $password | sudo cryptsetup open "$partition" "secret$next" -
+    [[ $? != 0 ]] && echo "password wrong." && exit 1
+    partition="/dev/mapper/secret$next"
+fi
+
 # If mount point exists in fstab mount and exit
 mount $partition && exit 0
 
