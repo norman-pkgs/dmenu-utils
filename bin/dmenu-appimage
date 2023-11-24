@@ -1,5 +1,7 @@
 #!/bin/zsh
 
-cmd=$(find ~/.local/share/appimages -mindepth 1 | dmenu)
+APP_PATH="$HOME/.local/share/appimages"
+cd $APP_PATH
+cmd=$(find * | dmenu)
 
-eval $cmd
+eval $APP_PATH/$cmd
