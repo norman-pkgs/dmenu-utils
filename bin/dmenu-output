@@ -1,19 +1,15 @@
 #!/bin/zsh
 
 switch_sink() {
-    echo switching default
-    pacmd set-default-sink $1 ||
-        echo failed
-    echo switching applications
-    pacmd list-sink-inputs |
-        awk '/index:/{print $2}' |
-        xargs -r -I{} pacmd move-sink-input {} $1 ||
+    pactl set-default-sink $1 ||
+      echo failed
+    pactl list sink-inputs | awk '/Sink Input #/{print $3}' | cut -c 2-99 | xargs -r -I{} pactl move-sink-input {} $1 ||
         echo failed
 }
 
 
-indexes=$(pacmd list-sinks | grep -E 'index:' | awk -F':' "{print \$2}" | awk '{$1=$1};1')
-descriptions=$(pacmd list-sinks | grep -E 'device.description =' | sed 's/"//g')
+indexes=$(pactl list sinks | grep -E 'Sink #' |  pactl list sinks | grep -E 'Sink #' | cut -c 7-99)
+descriptions=$(pactl list sinks | grep -E 'device.description =' | sed 's/"//g' | awk '{print $3 ,$4 ,$5 ,$6 ,$7 ,$8 ,$9 ,$10}')
 devices=$(echo $indexes | wc -l)
 
 typeset -A indexassociates
@@ -24,11 +20,9 @@ do
     realindex=$(echo $indexes | awk "NR==$i")
     indexassociates[$i]=$realindex
     line="$i "
-    line+=$(echo $descriptions | awk "NR==$i {print \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10, \$11, \$12, \$13, \$14, \$15, \$16}")
+    line+=$(echo $descriptions | awk "NR==$i")
     lines+=$line"\n"
 done
-
-echo $lines
 
 choice=$(echo $lines | grep . | dmenu | awk '{print $1}')
 
